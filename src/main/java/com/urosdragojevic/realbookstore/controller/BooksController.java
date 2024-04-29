@@ -82,7 +82,7 @@ public class BooksController {
     }
 
     @PostMapping("/books")
-    @PreAuthorize("hasAuthority('CREATE_BOOK')")
+    //@PreAuthorize("hasAuthority('CREATE_BOOK')")
     public String createBook(NewBook book) {
         List<Genre> genreList = this.genreRepository.getAll();
         List<Genre> genresToInsert = book.getGenres().stream().map(bookGenreId -> genreList.stream().filter(genre -> genre.getId() == bookGenreId).findFirst().get()).collect(Collectors.toList());
