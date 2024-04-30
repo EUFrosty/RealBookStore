@@ -1,5 +1,6 @@
 package com.urosdragojevic.realbookstore.repository;
 
+import com.urosdragojevic.realbookstore.audit.AuditLogger;
 import com.urosdragojevic.realbookstore.domain.Comment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,9 @@ public class CommentRepository {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("Neuspesno dodavanje komentara: " + comment.getComment());
         }
+        AuditLogger.getAuditLogger(CommentRepository.class).audit("Komentar: " + comment.getComment());
     }
 
     public List<Comment> getAll(int bookId) {
@@ -48,6 +51,7 @@ public class CommentRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("Neuspesno dohvatanje komentara za knjigu sa id-jem: " + bookId);
         }
         return commentList;
     }

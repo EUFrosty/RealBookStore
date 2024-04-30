@@ -37,6 +37,7 @@ public class PermissionRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("Neuspesno dohvatanje dozvola za ulogu: " + roleId);
         }
         return permissions;
     }

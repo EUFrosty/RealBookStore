@@ -37,6 +37,7 @@ public class BookRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("Neuspesno dovlacenje knjiga iz baze.");
         }
         return bookList;
     }
@@ -54,7 +55,11 @@ public class BookRepository {
             while (rs.next()) {
                 bookList.add(createBookFromResultSet(rs));
             }
+        }catch(SQLException e){
+            e.printStackTrace();
+            LOG.warn("Neuspesna pretraga. :(");
         }
+        AuditLogger.getAuditLogger(BookRepository.class).audit("U search polje uneto: " + searchTerm);
         return bookList;
     }
 
@@ -68,6 +73,7 @@ public class BookRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("Neuspesno dohvatanje knjige sa id-jem: " + bookId);
         }
         return null;
     }
@@ -95,12 +101,15 @@ public class BookRepository {
                         statement2.executeUpdate();
                     } catch (SQLException e) {
                         e.printStackTrace();
+                        LOG.error("Neuspesno dodavanje zanra, id: " + finalId + ", zanr: " + genre.getId());
                     }
                 });
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("Neuspesno dodavanje knjige u bazu: " + book.getTitle() + ", autor: " + book.getAuthor() + ", opis:" + book.getDescription());
         }
+        AuditLogger.getAuditLogger(BookRepository.class).audit("Kreirana knjiga: " + book.toString());
         return id;
     }
 
@@ -118,7 +127,9 @@ public class BookRepository {
             statement.executeUpdate(query4);
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("Neuspesno brisanje knjige sa id-jem: " + bookId);
         }
+        AuditLogger.getAuditLogger(BookRepository.class).audit("Obrisana knjiga: " + bookId);
     }
 
     private Book createBookFromResultSet(ResultSet rs) throws SQLException {

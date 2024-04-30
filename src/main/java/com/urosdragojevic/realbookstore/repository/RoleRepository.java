@@ -37,6 +37,7 @@ public class RoleRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("Neuspesno dohvatanje uloga korisnika: " + userId);
         }
         return roles;
     }

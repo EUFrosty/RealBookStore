@@ -36,6 +36,7 @@ public class GenreRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("Neuspesno dohvatanja zanrova");
         }
         return genreList;
     }
@@ -51,6 +52,7 @@ public class GenreRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("Neuspesno dohvatanje zanra za knjigu sa id-jem: " + bookId);
         }
         return genreList;
     }
